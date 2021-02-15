@@ -258,7 +258,11 @@ class ResponsiveImage
      */
     protected function getStorageFilename($size)
     {
-        return $this->filename . '__' . $size . '.' . $this->extension;
+        if ($this->webPEnabled && strpos($_SERVER['HTTP_ACCEPT'], 'image/webp') !== false) {
+            return $this->filename . '__' . $size . '.' . 'webp';
+        } else {
+            return $this->filename . '__' . $size . '.' . $this->extension;
+        }
     }
 
     /**
