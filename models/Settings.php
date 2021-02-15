@@ -2,7 +2,6 @@
 
 use Model;
 use October\Rain\Support\Facades\Flash;
-use OFFLINE\ResponsiveImages\Classes\Htaccess\HtaccessManager;
 
 class Settings extends Model
 {
@@ -51,20 +50,5 @@ class Settings extends Model
         $value = static::get($key, $default);
 
         return $value === '' ? $default : $value;
-    }
-
-    public function afterSave()
-    {
-        try {
-            $htaccess = new HtaccessManager();
-            $htaccess->toggleSection('webp-rewrite', (bool)$this->get('webp_enabled'));
-            $htaccess->save();
-        } catch (\Throwable $e) {
-            logger()->error(
-                '[OFFLINE.ResponsiveImages] Failed to automatically enable WebP support using .htaccess',
-                ['exeption' => $e]
-            );
-            Flash::warning('Failed to enable WebP support using .htaccess. You have to manually configure your server!');
-        }
     }
 }
